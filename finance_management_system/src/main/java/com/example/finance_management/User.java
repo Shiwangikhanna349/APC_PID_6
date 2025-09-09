@@ -18,15 +18,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions = new ArrayList<>();
 
-
     public User() {
     }
-
 
     public User(String name) {
         this.name = name;
     }
-
 
     public Long getId() {
         return id;
@@ -52,7 +49,6 @@ public class User {
         this.transactions = transactions;
     }
 
-
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
         transaction.setUser(this);
@@ -62,7 +58,6 @@ public class User {
         transactions.remove(transaction);
         transaction.setUser(null);
     }
-
 
     @Override
     public String toString() {
