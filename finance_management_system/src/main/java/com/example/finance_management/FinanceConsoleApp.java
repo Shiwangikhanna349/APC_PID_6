@@ -182,9 +182,9 @@ public class FinanceConsoleApp implements CommandLineRunner {
         String name = getStringInput("Enter user name: ");
         User user = financeService.addUser(name);
         if (user != null) {
-            System.out.println("✅ User added successfully! ID: " + user.getId());
+            System.out.println("User added successfully! ID: " + user.getId());
         } else {
-            System.out.println("❌ Failed to add user.");
+            System.out.println("Failed to add user.");
         }
     }
 
@@ -194,7 +194,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         System.out.println("-".repeat(25));
         List<User> users = financeService.getAllUsers();
         if (users.isEmpty()) {
-            System.out.println("📝 No users found.");
+            System.out.println("No users found.");
         } else {
             System.out.printf("%-5s %-20s%n", "ID", "Name");
             System.out.println("-".repeat(25));
@@ -213,7 +213,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         List<User> users = financeService.getAllUsers();
         if (users.isEmpty()) {
-            System.out.println("📝 No users found.");
+            System.out.println("No users found.");
             return;
         }
 
@@ -225,7 +225,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         Long id = getLongInput("Enter user ID to update: ");
         User existingUser = financeService.getUserById(id).orElse(null);
         if (existingUser == null) {
-            System.out.println("❌ User with ID " + id + " not found.");
+            System.out.println("User with ID " + id + " not found.");
             return;
         }
 
@@ -233,9 +233,9 @@ public class FinanceConsoleApp implements CommandLineRunner {
         String newName = getStringInput("Enter new name: ");
         User updatedUser = financeService.updateUser(id, newName);
         if (updatedUser != null) {
-            System.out.println("✅ User updated successfully!");
+            System.out.println("User updated successfully!");
         } else {
-            System.out.println("❌ Failed to update user.");
+            System.out.println("Failed to update user.");
         }
     }
 
@@ -246,7 +246,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         List<User> users = financeService.getAllUsers();
         if (users.isEmpty()) {
-            System.out.println("📝 No users found.");
+            System.out.println("No users found.");
             return;
         }
 
@@ -258,7 +258,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         Long id = getLongInput("Enter user ID to delete: ");
         User existingUser = financeService.getUserById(id).orElse(null);
         if (existingUser == null) {
-            System.out.println("❌ User with ID " + id + " not found.");
+            System.out.println("User with ID " + id + " not found.");
             return;
         }
 
@@ -267,9 +267,9 @@ public class FinanceConsoleApp implements CommandLineRunner {
         if (confirm.equals("y") || confirm.equals("yes")) {
             boolean deleted = financeService.deleteUser(id);
             if (deleted) {
-                System.out.println("✅ User deleted successfully!");
+                System.out.println("User deleted successfully!");
             } else {
-                System.out.println("❌ Failed to delete user.");
+                System.out.println("Failed to delete user.");
             }
         } else {
             System.out.println("Deletion cancelled.");
@@ -361,7 +361,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         List<User> users = financeService.getAllUsers();
         if (users.isEmpty()) {
-            System.out.println("📝 No users found.");
+            System.out.println("No users found.");
             return;
         }
 
@@ -384,7 +384,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         }
 
         if (!foundAny) {
-            System.out.println("📝 No transactions found.");
+            System.out.println("No transactions found.");
             return;
         }
 
@@ -404,7 +404,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         }
 
         if (transactionToUpdate == null) {
-            System.out.println("❌ Transaction with ID " + transactionId + " not found.");
+            System.out.println("Transaction with ID " + transactionId + " not found.");
             return;
         }
 
@@ -426,9 +426,9 @@ public class FinanceConsoleApp implements CommandLineRunner {
         Transaction updatedTransaction = financeService.updateTransaction(transactionId, newAmount, newType,
                 newDescription);
         if (updatedTransaction != null) {
-            System.out.println("✅ Transaction updated successfully!");
+            System.out.println("Transaction updated successfully!");
         } else {
-            System.out.println("❌ Failed to update transaction.");
+            System.out.println("Failed to update transaction.");
         }
     }
 
@@ -439,7 +439,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         List<User> users = financeService.getAllUsers();
         if (users.isEmpty()) {
-            System.out.println("📝 No users found.");
+            System.out.println("No users found.");
             return;
         }
 
@@ -462,7 +462,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         }
 
         if (!foundAny) {
-            System.out.println("📝 No transactions found.");
+            System.out.println(" No transactions found.");
             return;
         }
 
@@ -482,7 +482,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         }
 
         if (transactionToDelete == null) {
-            System.out.println("❌ Transaction with ID " + transactionId + " not found.");
+            System.out.println("Transaction with ID " + transactionId + " not found.");
             return;
         }
 
@@ -496,9 +496,9 @@ public class FinanceConsoleApp implements CommandLineRunner {
         if (confirm.equals("y") || confirm.equals("yes")) {
             boolean deleted = financeService.deleteTransaction(transactionId);
             if (deleted) {
-                System.out.println("✅ Transaction deleted successfully!");
+                System.out.println("Transaction deleted successfully!");
             } else {
-                System.out.println("❌ Failed to delete transaction.");
+                System.out.println("Failed to delete transaction.");
             }
         } else {
             System.out.println("Deletion cancelled.");
@@ -515,11 +515,11 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         if (choice == 1) {
             Double totalIncome = financeService.getTotalIncome(null);
-            System.out.println("\n💰 Total Income (All Users): $" + String.format("%.2f", totalIncome));
+            System.out.println("\nTotal Income (All Users): $" + String.format("%.2f", totalIncome));
 
             List<User> users = financeService.getAllUsers();
             if (!users.isEmpty()) {
-                System.out.println("\n📊 Income breakdown by user:");
+                System.out.println("\nIncome breakdown by user:");
                 System.out.println("-".repeat(40));
                 for (User user : users) {
                     Double userIncome = financeService.getTotalIncome(user.getId());
@@ -529,7 +529,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         } else if (choice == 2) {
             List<User> users = financeService.getAllUsers();
             if (users.isEmpty()) {
-                System.out.println("📝 No users found.");
+                System.out.println("No users found.");
                 return;
             }
 
@@ -541,12 +541,12 @@ public class FinanceConsoleApp implements CommandLineRunner {
             Long userId = getLongInput("Enter user ID: ");
             User user = financeService.getUserById(userId).orElse(null);
             if (user == null) {
-                System.out.println("❌ User with ID " + userId + " not found.");
+                System.out.println("User with ID " + userId + " not found.");
                 return;
             }
 
             Double totalIncome = financeService.getTotalIncome(userId);
-            System.out.println("\n💰 Total Income for " + user.getName() + ": $" + String.format("%.2f", totalIncome));
+            System.out.println("\nTotal Income for " + user.getName() + ": $" + String.format("%.2f", totalIncome));
         }
     }
 
@@ -560,11 +560,11 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         if (choice == 1) {
             Double totalExpenses = financeService.getTotalExpenses(null);
-            System.out.println("\n💸 Total Expenses (All Users): $" + String.format("%.2f", totalExpenses));
+            System.out.println("\n Total Expenses (All Users): $" + String.format("%.2f", totalExpenses));
 
             List<User> users = financeService.getAllUsers();
             if (!users.isEmpty()) {
-                System.out.println("\n📊 Expenses breakdown by user:");
+                System.out.println("\nExpenses breakdown by user:");
                 System.out.println("-".repeat(40));
                 for (User user : users) {
                     Double userExpenses = financeService.getTotalExpenses(user.getId());
@@ -574,7 +574,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         } else if (choice == 2) {
             List<User> users = financeService.getAllUsers();
             if (users.isEmpty()) {
-                System.out.println("📝 No users found.");
+                System.out.println("No users found.");
                 return;
             }
 
@@ -586,7 +586,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
             Long userId = getLongInput("Enter user ID: ");
             User user = financeService.getUserById(userId).orElse(null);
             if (user == null) {
-                System.out.println("❌ User with ID " + userId + " not found.");
+                System.out.println("User with ID " + userId + " not found.");
                 return;
             }
 
@@ -606,11 +606,11 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         if (choice == 1) {
             Double balance = financeService.getBalance(null);
-            System.out.println("\n💳 Total Balance (All Users): $" + String.format("%.2f", balance));
+            System.out.println("\nTotal Balance (All Users): $" + String.format("%.2f", balance));
 
             List<User> users = financeService.getAllUsers();
             if (!users.isEmpty()) {
-                System.out.println("\n📊 Balance breakdown by user:");
+                System.out.println("\n Balance breakdown by user:");
                 System.out.println("-".repeat(50));
                 System.out.printf("%-20s %-15s %-15s %-15s%n", "User", "Income", "Expenses", "Balance");
                 System.out.println("-".repeat(50));
@@ -625,7 +625,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
         } else if (choice == 2) {
             List<User> users = financeService.getAllUsers();
             if (users.isEmpty()) {
-                System.out.println("📝 No users found.");
+                System.out.println("No users found.");
                 return;
             }
 
@@ -637,7 +637,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
             Long userId = getLongInput("Enter user ID: ");
             User user = financeService.getUserById(userId).orElse(null);
             if (user == null) {
-                System.out.println("❌ User with ID " + userId + " not found.");
+                System.out.println("User with ID " + userId + " not found.");
                 return;
             }
 
@@ -645,7 +645,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
             Double userExpenses = financeService.getTotalExpenses(userId);
             Double balance = financeService.getBalance(userId);
 
-            System.out.println("\n💳 Balance for " + user.getName() + ":");
+            System.out.println("\nBalance for " + user.getName() + ":");
             System.out.println("Income: $" + String.format("%.2f", userIncome));
             System.out.println("Expenses: $" + String.format("%.2f", userExpenses));
             System.out.println("Balance: $" + String.format("%.2f", balance));

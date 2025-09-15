@@ -83,7 +83,15 @@ public class FinanceService {
     public List<Transaction> getTransactionsByUser(Long userId) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isPresent()) {
-            return transactionRepository.findByUser(userOpt.get());
+            List<Transaction> transactions = transactionRepository.findByUser(userOpt.get());
+            // Populate userId and userName for JSON response
+            for (Transaction transaction : transactions) {
+                if (transaction.getUser() != null) {
+                    transaction.setUserId(transaction.getUser().getId());
+                    transaction.setUserName(transaction.getUser().getName());
+                }
+            }
+            return transactions;
         }
         return List.of();
     }
@@ -139,7 +147,15 @@ public class FinanceService {
     public List<Transaction> getMonthlySummary(Long userId, int year, int month) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isPresent()) {
-            return transactionRepository.getMonthlyTransactions(userOpt.get(), year, month);
+            List<Transaction> transactions = transactionRepository.getMonthlyTransactions(userOpt.get(), year, month);
+            // Populate userId and userName for JSON response
+            for (Transaction transaction : transactions) {
+                if (transaction.getUser() != null) {
+                    transaction.setUserId(transaction.getUser().getId());
+                    transaction.setUserName(transaction.getUser().getName());
+                }
+            }
+            return transactions;
         }
         return List.of();
     }
@@ -150,7 +166,15 @@ public class FinanceService {
     }
 
     public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
+        List<Transaction> transactions = transactionRepository.findAllWithUser();
+        // Populate userId and userName for JSON response
+        for (Transaction transaction : transactions) {
+            if (transaction.getUser() != null) {
+                transaction.setUserId(transaction.getUser().getId());
+                transaction.setUserName(transaction.getUser().getName());
+            }
+        }
+        return transactions;
     }
 
     public Optional<Transaction> getTransactionById(Long id) {
