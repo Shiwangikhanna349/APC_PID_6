@@ -6,6 +6,7 @@ import com.example.finance_management.User;
 import com.example.finance_management.dto.ApiResponse;
 import com.example.finance_management.dto.TransactionRequest;
 import com.example.finance_management.dto.TransactionResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,26 +26,8 @@ public class TransactionController {
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<TransactionResponse>> addTransaction(
-            @RequestBody TransactionRequest transactionRequest) {
+            @Valid @RequestBody TransactionRequest transactionRequest) {
         try {
-            if (transactionRequest.getAmount() == null || transactionRequest.getAmount() <= 0) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Valid amount is required"));
-            }
-            if (transactionRequest.getType() == null) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Transaction type is required"));
-            }
-            if (transactionRequest.getUserId() == null) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("User ID is required"));
-            }
-            if (transactionRequest.getDescription() == null || transactionRequest.getDescription().trim().isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Description is required"));
-            }
-
-           
             Optional<User> userOpt = financeService.getUserById(transactionRequest.getUserId());
             if (!userOpt.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -131,21 +114,8 @@ public class TransactionController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(@PathVariable Long id,
-            @RequestBody TransactionRequest transactionRequest) {
+            @Valid @RequestBody TransactionRequest transactionRequest) {
         try {
-            if (transactionRequest.getAmount() == null || transactionRequest.getAmount() <= 0) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Valid amount is required"));
-            }
-            if (transactionRequest.getType() == null) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Transaction type is required"));
-            }
-            if (transactionRequest.getDescription() == null || transactionRequest.getDescription().trim().isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("Description is required"));
-            }
-
             Transaction updatedTransaction = financeService.updateTransaction(
                     id,
                     transactionRequest.getAmount(),

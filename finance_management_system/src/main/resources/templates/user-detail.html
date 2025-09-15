@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+</head>
+<body>
+    <h1>User Details</h1>
+    
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td><strong>ID</strong></td>
+            <td th:text="${user.id}"></td>
+        </tr>
+        <tr>
+            <td><strong>Name</strong></td>
+            <td th:text="${user.name}"></td>
+        </tr>
+        <tr>
+            <td><strong>Email</strong></td>
+            <td th:text="${user.email}"></td>
+        </tr>
+        <tr>
+            <td><strong>Phone Number</strong></td>
+            <td th:text="${user.phoneNumber}"></td>
+        </tr>
+        <tr>
+            <td><strong>Address</strong></td>
+            <td th:text="${user.address}"></td>
+        </tr>
+        <tr>
+            <td><strong>Bank Account Number</strong></td>
+            <td th:text="${user.bankAccountNumber}"></td>
+        </tr>
+    </table>
+    
+    <br>
+    <a th:href="@{/web/user/edit/{id}(id=${user.id})}">Edit User</a> |
+    <a th:href="@{/user/delete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')">Delete User</a> |
+    <a href="/web/user/list">View All Users</a> |
+    <a href="/">Back to Home</a>
+</body>
+</html>

@@ -21,6 +21,16 @@ public class FinanceService {
         return userRepository.save(user);
     }
 
+    public User addUser(String name, String email, String phoneNumber) {
+        User user = new User(name, email, phoneNumber);
+        return userRepository.save(user);
+    }
+
+    public User addUser(String name, String email, String phoneNumber, String address, String bankAccountNumber) {
+        User user = new User(name, email, phoneNumber, address, bankAccountNumber);
+        return userRepository.save(user);
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -34,6 +44,20 @@ public class FinanceService {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             user.setName(name);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    public User updateUser(Long id, String name, String email, String phoneNumber, String address, String bankAccountNumber) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setName(name);
+            user.setEmail(email);
+            user.setPhoneNumber(phoneNumber);
+            user.setAddress(address);
+            user.setBankAccountNumber(bankAccountNumber);
             return userRepository.save(user);
         }
         return null;
@@ -123,5 +147,13 @@ public class FinanceService {
     public List<Transaction> getCurrentMonthSummary(Long userId) {
         YearMonth currentMonth = YearMonth.now();
         return getMonthlySummary(userId, currentMonth.getYear(), currentMonth.getMonthValue());
+    }
+
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
+    }
+
+    public Optional<Transaction> getTransactionById(Long id) {
+        return transactionRepository.findById(id);
     }
 }

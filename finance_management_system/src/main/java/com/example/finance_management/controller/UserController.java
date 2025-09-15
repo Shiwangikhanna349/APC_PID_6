@@ -5,6 +5,7 @@ import com.example.finance_management.User;
 import com.example.finance_management.dto.ApiResponse;
 import com.example.finance_management.dto.UserRequest;
 import com.example.finance_management.dto.UserResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +24,30 @@ public class UserController {
     private FinanceService financeService;
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<UserResponse>> addUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<ApiResponse<UserResponse>> addUser(@Valid @RequestBody UserRequest userRequest) {
         try {
-            if (userRequest.getName() == null || userRequest.getName().trim().isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("User name is required"));
+            User user;
+            if (userRequest.getEmail() != null && userRequest.getPhoneNumber() != null) {
+                user = financeService.addUser(
+                    userRequest.getName().trim(),
+                    userRequest.getEmail().trim(),
+                    userRequest.getPhoneNumber().trim(),
+                    userRequest.getAddress() != null ? userRequest.getAddress().trim() : null,
+                    userRequest.getBankAccountNumber() != null ? userRequest.getBankAccountNumber().trim() : null
+                );
+            } else {
+                user = financeService.addUser(userRequest.getName().trim());
             }
 
-            User user = financeService.addUser(userRequest.getName().trim());
             if (user != null) {
-                UserResponse userResponse = new UserResponse(user.getId(), user.getName());
+                UserResponse userResponse = new UserResponse(
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    user.getAddress(),
+                    user.getBankAccountNumber()
+                );
                 return ResponseEntity.ok(ApiResponse.success("User added successfully", userResponse));
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -49,7 +64,14 @@ public class UserController {
         try {
             List<User> users = financeService.getAllUsers();
             List<UserResponse> userResponses = users.stream()
-                    .map(user -> new UserResponse(user.getId(), user.getName()))
+                    .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getPhoneNumber(),
+                        user.getAddress(),
+                        user.getBankAccountNumber()
+                    ))
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(ApiResponse.success("Users retrieved successfully", userResponses));
@@ -65,7 +87,14 @@ public class UserController {
             Optional<User> userOpt = financeService.getUserById(id);
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
-                UserResponse userResponse = new UserResponse(user.getId(), user.getName());
+                UserResponse userResponse = new UserResponse(
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    user.getAddress(),
+                    user.getBankAccountNumber()
+                );
                 return ResponseEntity.ok(ApiResponse.success("User retrieved successfully", userResponse));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -79,16 +108,31 @@ public class UserController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable Long id,
-            @RequestBody UserRequest userRequest) {
+            @Valid @RequestBody UserRequest userRequest) {
         try {
-            if (userRequest.getName() == null || userRequest.getName().trim().isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("User name is required"));
+            User updatedUser;
+            if (userRequest.getEmail() != null && userRequest.getPhoneNumber() != null) {
+                updatedUser = financeService.updateUser(
+                    id,
+                    userRequest.getName().trim(),
+                    userRequest.getEmail().trim(),
+                    userRequest.getPhoneNumber().trim(),
+                    userRequest.getAddress() != null ? userRequest.getAddress().trim() : null,
+                    userRequest.getBankAccountNumber() != null ? userRequest.getBankAccountNumber().trim() : null
+                );
+            } else {
+                updatedUser = financeService.updateUser(id, userRequest.getName().trim());
             }
 
-            User updatedUser = financeService.updateUser(id, userRequest.getName().trim());
             if (updatedUser != null) {
-                UserResponse userResponse = new UserResponse(updatedUser.getId(), updatedUser.getName());
+                UserResponse userResponse = new UserResponse(
+                    updatedUser.getId(),
+                    updatedUser.getName(),
+                    updatedUser.getEmail(),
+                    updatedUser.getPhoneNumber(),
+                    updatedUser.getAddress(),
+                    updatedUser.getBankAccountNumber()
+                );
                 return ResponseEntity.ok(ApiResponse.success("User updated successfully", userResponse));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)

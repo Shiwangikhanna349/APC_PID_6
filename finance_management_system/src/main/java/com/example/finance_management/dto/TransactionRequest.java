@@ -1,14 +1,35 @@
 package com.example.finance_management.dto;
 
 import com.example.finance_management.TransactionType;
+import jakarta.validation.constraints.*;
 
 public class TransactionRequest {
+    private Long id;
+
+    @NotNull(message = "Amount is required")
+    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private Double amount;
+
+    @NotNull(message = "Transaction type is required")
     private TransactionType type;
+
+    @NotBlank(message = "Description is required")
+    @Size(max = 255, message = "Description must not exceed 255 characters")
     private String description;
+
+    @NotNull(message = "User ID is required")
+    @Positive(message = "User ID must be positive")
     private Long userId;
 
     public TransactionRequest() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public TransactionRequest(Double amount, TransactionType type, String description, Long userId) {

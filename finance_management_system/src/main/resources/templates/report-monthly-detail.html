@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Report</title>
+</head>
+<body>
+    <h1>Monthly Report</h1>
+    
+    <div th:if="${error}" style="color: red; margin-bottom: 10px;" th:text="${error}"></div>
+    
+    <div th:if="${user}">
+        <h2 th:text="${user.name}"></h2>
+        <p><strong>Month:</strong> <span th:text="${month}"></span>/<span th:text="${year}"></span></p>
+        
+        <h3>Monthly Summary</h3>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <td><strong>Monthly Income:</strong></td>
+                <td th:text="${monthlyIncome}"></td>
+            </tr>
+            <tr>
+                <td><strong>Monthly Expenses:</strong></td>
+                <td th:text="${monthlyExpenses}"></td>
+            </tr>
+            <tr>
+                <td><strong>Monthly Balance:</strong></td>
+                <td th:text="${monthlyBalance}" th:style="${monthlyBalance >= 0} ? 'color: green;' : 'color: red;'"></td>
+            </tr>
+        </table>
+        
+        <h3>Monthly Transactions</h3>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="transaction : ${transactions}">
+                    <td th:text="${transaction.id}"></td>
+                    <td th:text="${transaction.amount}"></td>
+                    <td th:text="${transaction.type}"></td>
+                    <td th:text="${transaction.description}"></td>
+                    <td th:text="${#temporals.format(transaction.transactionDate, 'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <br>
+    <a href="/web/report/monthly-form">Generate Another Report</a> |
+    <a href="/web/user/list">View All Users</a> |
+    <a href="/">Back to Home</a>
+</body>
+</html>

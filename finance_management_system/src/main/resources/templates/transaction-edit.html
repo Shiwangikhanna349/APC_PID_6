@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Transaction</title>
+</head>
+<body>
+    <h1>Edit Transaction</h1>
+    
+    <div th:if="${success}" style="color: green; margin-bottom: 10px;" th:text="${success}"></div>
+    <div th:if="${error}" style="color: red; margin-bottom: 10px;" th:text="${error}"></div>
+    
+    <form action="/transaction/edit-web" method="POST">
+        <input type="hidden" name="id" th:value="${transaction.id}">
+        <input type="hidden" name="userId" th:value="${transaction.user.id}">
+        
+        <div>
+            <label for="amount">Amount (Required):</label><br>
+            <input type="number" id="amount" name="amount" step="0.01" th:value="${transaction.amount}" required min="0.01">
+        </div>
+        <br>
+        
+        <div>
+            <label for="type">Transaction Type (Required):</label><br>
+            <select id="type" name="type" required>
+                <option value="">Select Type</option>
+                <option value="INCOME" th:selected="${transaction.type == 'INCOME'}">Income</option>
+                <option value="EXPENSE" th:selected="${transaction.type == 'EXPENSE'}">Expense</option>
+            </select>
+        </div>
+        <br>
+        
+        <div>
+            <label for="description">Description (Required):</label><br>
+            <input type="text" id="description" name="description" th:value="${transaction.description}" required maxlength="255">
+        </div>
+        <br>
+        
+        <div>
+            <button type="submit">Update Transaction</button>
+            <button type="reset">Reset Form</button>
+        </div>
+    </form>
+    
+    <br>
+    <a href="/web/transaction/list">View All Transactions</a> |
+    <a href="/">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Transactions</title>
+</head>
+<body>
+    <h1>View User Transactions</h1>
+    
+    <form action="/web/transaction/user" method="GET">
+        <div>
+            <label for="userId">User ID:</label><br>
+            <input type="number" id="userId" name="userId" required min="1">
+        </div>
+        <br>
+        
+        <div>
+            <button type="submit">View Transactions</button>
+        </div>
+    </form>
+    
+    <br>
+    <a href="/web/transaction/list">View All Transactions</a> |
+    <a href="/">Back to Home</a>
+</body>
+</html>

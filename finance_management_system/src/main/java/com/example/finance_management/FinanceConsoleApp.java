@@ -25,10 +25,7 @@ public class FinanceConsoleApp implements CommandLineRunner {
 
         Thread.sleep(1000);
 
-        System.out.println("\n" + "=".repeat(50));
         System.out.println("=== Finance Management System ===");
-        System.out.println("Welcome to the Finance Management Console!");
-        System.out.println("=".repeat(50));
 
         boolean running = true;
         while (running) {
@@ -57,9 +54,9 @@ public class FinanceConsoleApp implements CommandLineRunner {
     }
 
     private void displayMainMenu() {
-        System.out.println("\n" + "=".repeat(30));
+
         System.out.println("=== MAIN MENU ===");
-        System.out.println("=".repeat(30));
+       
         System.out.println("1. Manage Users");
         System.out.println("2. Manage Transactions");
         System.out.println("3. Reports");

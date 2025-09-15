@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Transactions</title>
+</head>
+<body>
+    <h1>All Transactions</h1>
+    
+    <div th:if="${success}" style="color: green; margin-bottom: 10px;" th:text="${success}"></div>
+    <div th:if="${error}" style="color: red; margin-bottom: 10px;" th:text="${error}"></div>
+    
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.id}"></td>
+                <td th:text="${transaction.amount}"></td>
+                <td th:text="${transaction.type}"></td>
+                <td th:text="${transaction.description}"></td>
+                <td th:text="${#temporals.format(transaction.transactionDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${transaction.user.name}"></td>
+                <td>
+                    <a th:href="@{/web/transaction/edit/{id}(id=${transaction.id})}">Edit</a> |
+                    <form th:action="@{/transaction/delete-web}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure?')">
+                        <input type="hidden" name="id" th:value="${transaction.id}">
+                        <button type="submit" style="background: none; border: none; color: #0066cc; text-decoration: underline; cursor: pointer;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <br>
+    <a href="/transaction/add-form">Add New Transaction</a> |
+    <a href="/transaction/user-form">View User Transactions</a> |
+    <a href="/">Back to Home</a>
+</body>
+</html>

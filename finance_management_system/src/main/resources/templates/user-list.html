@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+</head>
+<body>
+    <h1>All Users</h1>
+    
+    <div th:if="${success}" style="color: green; margin-bottom: 10px;" th:text="${success}"></div>
+    <div th:if="${error}" style="color: red; margin-bottom: 10px;" th:text="${error}"></div>
+    
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Bank Account</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td th:text="${user.address}"></td>
+                <td th:text="${user.bankAccountNumber}"></td>
+                <td>
+                    <a th:href="@{/web/user/view/{id}(id=${user.id})}">View</a> |
+                    <a th:href="@{/web/user/edit/{id}(id=${user.id})}">Edit</a> |
+                    <form th:action="@{/user/delete-web}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure?')">
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <button type="submit" style="background: none; border: none; color: #0066cc; text-decoration: underline; cursor: pointer;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <br>
+    <a href="/user/add-form">Add New User</a> |
+    <a href="/">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User Form</title>
+</head>
+<body>
+    <h1>Edit User</h1>
+    
+    <div th:if="${success}" style="color: green; margin-bottom: 10px;" th:text="${success}"></div>
+    <div th:if="${error}" style="color: red; margin-bottom: 10px;" th:text="${error}"></div>
+    
+    <form action="/user/search-web" method="GET">
+        <div>
+            <label for="id">User ID to Edit:</label><br>
+            <input type="number" id="id" name="id" required min="1">
+        </div>
+        <br>
+        <div>
+            <button type="submit">Find User</button>
+            <button type="reset">Reset Form</button>
+        </div>
+    </form>
+    
+    <br>
+    <a href="/web/user/list">View All Users</a> |
+    <a href="/">Back to Home</a>
+</body>
+</html>
