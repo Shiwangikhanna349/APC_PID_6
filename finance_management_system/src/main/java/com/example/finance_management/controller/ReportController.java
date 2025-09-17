@@ -164,7 +164,7 @@ public class ReportController {
             User user = userOpt.get();
             List<com.example.finance_management.Transaction> transactions = financeService.getTransactionsByUser(userId);
             
-            // Convert to DTOs to avoid circular reference
+         
             UserReportResponse userDTO = new UserReportResponse(
                 user.getId(),
                 user.getName(),
@@ -206,21 +206,66 @@ public class ReportController {
         }
     }
 
-    @GetMapping("/monthly-simple")
+    @GetMapping("/monthly")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getMonthlySummary(
             @RequestParam Long userId,
             @RequestParam Integer year,
             @RequestParam Integer month) {
         try {
-            // Simple approach - just return basic data without complex queries
+            Optional<User> userOpt = financeService.getUserById(userId);
+            if (!userOpt.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error("User with ID " + userId + " not found"));
+            }
+
+            User user = userOpt.get();
+            List<com.example.finance_management.Transaction> allTransactions = financeService.getTransactionsByUser(userId);
+            
+            // Filter transactions for the specific month and year
+            List<com.example.finance_management.Transaction> monthlyTransactions = new ArrayList<>();
+            double monthlyIncome = 0.0;
+            double monthlyExpenses = 0.0;
+            
+            for (com.example.finance_management.Transaction transaction : allTransactions) {
+                if (transaction.getTransactionDate().getYear() == year && 
+                    transaction.getTransactionDate().getMonthValue() == month) {
+                    monthlyTransactions.add(transaction);
+                    
+                    if (transaction.getType().toString().equals("INCOME")) {
+                        monthlyIncome += transaction.getAmount();
+                    } else {
+                        monthlyExpenses += transaction.getAmount();
+                    }
+                }
+            }
+            
+            double monthlyBalance = monthlyIncome - monthlyExpenses;
+            
+            // Convert to DTOs to avoid circular reference
+            List<MonthlyReportResponse> transactionDTOs = new ArrayList<>();
+            for (com.example.finance_management.Transaction transaction : monthlyTransactions) {
+                MonthlyReportResponse dto = new MonthlyReportResponse(
+                    transaction.getId(),
+                    transaction.getAmount(),
+                    transaction.getType().toString(),
+                    transaction.getDescription(),
+                    transaction.getTransactionDate(),
+                    transaction.getUserId(),
+                    transaction.getUserName()
+                );
+                transactionDTOs.add(dto);
+            }
+
             Map<String, Object> result = new HashMap<>();
             result.put("userId", userId);
+            result.put("userName", user.getName());
             result.put("year", year);
             result.put("month", month);
-            result.put("monthlyIncome", 526900.0);
-            result.put("monthlyExpenses", 134800.0);
-            result.put("monthlyBalance", 392100.0);
-            result.put("transactions", new ArrayList<>());
+            result.put("monthlyIncome", monthlyIncome);
+            result.put("monthlyExpenses", monthlyExpenses);
+            result.put("monthlyBalance", monthlyBalance);
+            result.put("transactionCount", monthlyTransactions.size());
+            result.put("transactions", transactionDTOs);
 
             return ResponseEntity.ok(ApiResponse.success("Monthly summary generated successfully", result));
         } catch (Exception e) {

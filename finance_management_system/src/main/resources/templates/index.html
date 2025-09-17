@@ -414,43 +414,11 @@
             const month = document.getElementById('monthlyReportMonth').value;
             
             try {
-            
-                const response = await fetch(`/reports/user?userId=${userId}`);
+                const response = await fetch(`/reports/monthly?userId=${userId}&year=${year}&month=${month}`);
                 const result = await response.json();
                 
                 if (result.success) {
-               
-                    const targetMonth = parseInt(month);
-                    const targetYear = parseInt(year);
-                    
-                    const monthlyTransactions = result.data.transactions.filter(transaction => {
-                        const transactionDate = new Date(transaction.transactionDate);
-                        return transactionDate.getMonth() + 1 === targetMonth && 
-                               transactionDate.getFullYear() === targetYear;
-                    });
-                    
-                
-                    const monthlyIncome = monthlyTransactions
-                        .filter(t => t.type === 'INCOME')
-                        .reduce((sum, t) => sum + t.amount, 0);
-                    
-                    const monthlyExpenses = monthlyTransactions
-                        .filter(t => t.type === 'EXPENSE')
-                        .reduce((sum, t) => sum + t.amount, 0);
-                    
-                    const monthlyBalance = monthlyIncome - monthlyExpenses;
-                    
-       
-                    const monthlyData = {
-                        userId: parseInt(userId),
-                        year: targetYear,
-                        month: targetMonth,
-                        monthlyIncome: monthlyIncome,
-                        monthlyExpenses: monthlyExpenses,
-                        monthlyBalance: monthlyBalance,
-                        transactions: monthlyTransactions
-                    };
-                    displayMonthlyReport(monthlyData);
+                    displayMonthlyReport(result.data);
                 } else {
                     showMessage(result.message || 'Error generating report', 'error');
                 }

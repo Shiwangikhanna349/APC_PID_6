@@ -14,7 +14,7 @@ public class DataLoader {
         if (financeService.getAllUsers().isEmpty()) {
             System.out.println("Loading sample data...");
 
-            // Create users with complete profile information
+           
             User user1 = financeService.addUser(
                 "John Doe",
                 "john.doe@example.com",
@@ -39,7 +39,7 @@ public class DataLoader {
                 "3456789012345678"
             );
 
-            // Create additional users with different profile completeness
+           
             User user4 = financeService.addUser(
                 "Alice Brown",
                 "alice.brown@example.com",
