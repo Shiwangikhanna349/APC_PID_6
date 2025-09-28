@@ -33,14 +33,14 @@ public class ReportController {
             Map<String, Object> result = new HashMap<>();
 
             if (userId != null) {
-                Boolean userExists = userServiceClient.userExists(userId).block();
+                Boolean userExists = userServiceClient.userExists(userId);
                 if (userExists == null || !userExists) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body(ApiResponse.error("User with ID " + userId + " not found"));
                 }
 
-                Double totalIncome = transactionServiceClient.getTotalIncome(userId).block();
-                String userName = userServiceClient.getUserName(userId).block();
+                Double totalIncome = transactionServiceClient.getTotalIncome(userId);
+                String userName = userServiceClient.getUserName(userId);
                 
                 result.put("userId", userId);
                 result.put("userName", userName);
@@ -66,14 +66,14 @@ public class ReportController {
             Map<String, Object> result = new HashMap<>();
 
             if (userId != null) {
-                Boolean userExists = userServiceClient.userExists(userId).block();
+                Boolean userExists = userServiceClient.userExists(userId);
                 if (userExists == null || !userExists) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body(ApiResponse.error("User with ID " + userId + " not found"));
                 }
 
-                Double totalExpenses = transactionServiceClient.getTotalExpenses(userId).block();
-                String userName = userServiceClient.getUserName(userId).block();
+                Double totalExpenses = transactionServiceClient.getTotalExpenses(userId);
+                String userName = userServiceClient.getUserName(userId);
                 
                 result.put("userId", userId);
                 result.put("userName", userName);
@@ -96,16 +96,16 @@ public class ReportController {
             Map<String, Object> result = new HashMap<>();
 
             if (userId != null) {
-                Boolean userExists = userServiceClient.userExists(userId).block();
+                Boolean userExists = userServiceClient.userExists(userId);
                 if (userExists == null || !userExists) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body(ApiResponse.error("User with ID " + userId + " not found"));
                 }
 
-                Double income = transactionServiceClient.getTotalIncome(userId).block();
-                Double expenses = transactionServiceClient.getTotalExpenses(userId).block();
+                Double income = transactionServiceClient.getTotalIncome(userId);
+                Double expenses = transactionServiceClient.getTotalExpenses(userId);
                 Double balance = income - expenses;
-                String userName = userServiceClient.getUserName(userId).block();
+                String userName = userServiceClient.getUserName(userId);
 
                 result.put("userId", userId);
                 result.put("userName", userName);
@@ -127,17 +127,17 @@ public class ReportController {
     @GetMapping("/user")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getUserReport(@RequestParam Long userId) {
         try {
-            Boolean userExists = userServiceClient.userExists(userId).block();
+            Boolean userExists = userServiceClient.userExists(userId);
             if (userExists == null || !userExists) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ApiResponse.error("User with ID " + userId + " not found"));
             }
 
-            UserReportResponse userDTO = userServiceClient.getUser(userId).block();
-            List<MonthlyReportResponse> transactionDTOs = transactionServiceClient.getTransactionsByUser(userId).block();
+            UserReportResponse userDTO = userServiceClient.getUser(userId);
+            List<MonthlyReportResponse> transactionDTOs = transactionServiceClient.getTransactionsByUser(userId);
             
-            Double totalIncome = transactionServiceClient.getTotalIncome(userId).block();
-            Double totalExpenses = transactionServiceClient.getTotalExpenses(userId).block();
+            Double totalIncome = transactionServiceClient.getTotalIncome(userId);
+            Double totalExpenses = transactionServiceClient.getTotalExpenses(userId);
             Double netBalance = totalIncome - totalExpenses;
 
             Map<String, Object> result = new HashMap<>();
@@ -160,14 +160,14 @@ public class ReportController {
             @RequestParam Integer year,
             @RequestParam Integer month) {
         try {
-            Boolean userExists = userServiceClient.userExists(userId).block();
+            Boolean userExists = userServiceClient.userExists(userId);
             if (userExists == null || !userExists) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ApiResponse.error("User with ID " + userId + " not found"));
             }
 
-            String userName = userServiceClient.getUserName(userId).block();
-            List<MonthlyReportResponse> allTransactions = transactionServiceClient.getTransactionsByUser(userId).block();
+            String userName = userServiceClient.getUserName(userId);
+            List<MonthlyReportResponse> allTransactions = transactionServiceClient.getTransactionsByUser(userId);
             
             // Filter transactions for the specific month and year
             List<MonthlyReportResponse> monthlyTransactions = new ArrayList<>();
@@ -214,14 +214,14 @@ public class ReportController {
             @RequestParam Integer month,
             @RequestParam Integer week) {
         try {
-            Boolean userExists = userServiceClient.userExists(userId).block();
+            Boolean userExists = userServiceClient.userExists(userId);
             if (userExists == null || !userExists) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ApiResponse.error("User with ID " + userId + " not found"));
             }
 
-            String userName = userServiceClient.getUserName(userId).block();
-            List<MonthlyReportResponse> allTransactions = transactionServiceClient.getTransactionsByUser(userId).block();
+            String userName = userServiceClient.getUserName(userId);
+            List<MonthlyReportResponse> allTransactions = transactionServiceClient.getTransactionsByUser(userId);
             
             // Calculate the date range for the specified week
             java.time.LocalDate firstDayOfMonth = java.time.LocalDate.of(year, month, 1);

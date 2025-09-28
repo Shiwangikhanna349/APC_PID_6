@@ -28,7 +28,7 @@ public class TransactionService {
         List<Transaction> transactions = transactionRepository.findByUserId(userId);
         // Populate userName for JSON response
         for (Transaction transaction : transactions) {
-            String userName = userServiceClient.getUserName(userId).block();
+            String userName = userServiceClient.getUserName(userId);
             transaction.setUserName(userName);
         }
         return transactions;
@@ -78,7 +78,7 @@ public class TransactionService {
         List<Transaction> transactions = transactionRepository.getMonthlyTransactions(userId, year, month);
         // Populate userName for JSON response
         for (Transaction transaction : transactions) {
-            String userName = userServiceClient.getUserName(userId).block();
+            String userName = userServiceClient.getUserName(userId);
             transaction.setUserName(userName);
         }
         return transactions;
@@ -93,7 +93,7 @@ public class TransactionService {
         List<Transaction> transactions = transactionRepository.findAll();
         // Populate userName for JSON response
         for (Transaction transaction : transactions) {
-            String userName = userServiceClient.getUserName(transaction.getUserId()).block();
+            String userName = userServiceClient.getUserName(transaction.getUserId());
             transaction.setUserName(userName);
         }
         return transactions;

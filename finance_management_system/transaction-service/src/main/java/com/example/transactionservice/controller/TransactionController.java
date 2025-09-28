@@ -33,7 +33,7 @@ public class TransactionController {
             @Valid @RequestBody TransactionRequest transactionRequest) {
         try {
             // Validate user exists
-            Boolean userExists = userServiceClient.userExists(transactionRequest.getUserId()).block();
+            Boolean userExists = userServiceClient.userExists(transactionRequest.getUserId());
             if (userExists == null || !userExists) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ApiResponse.error("User with ID " + transactionRequest.getUserId() + " not found"));
@@ -46,7 +46,7 @@ public class TransactionController {
                     transactionRequest.getUserId());
 
             if (transaction != null) {
-                String userName = userServiceClient.getUserName(transaction.getUserId()).block();
+                String userName = userServiceClient.getUserName(transaction.getUserId());
                 TransactionResponse transactionResponse = new TransactionResponse(
                         transaction.getId(),
                         transaction.getAmount(),
@@ -70,7 +70,7 @@ public class TransactionController {
     public ResponseEntity<ApiResponse<List<TransactionResponse>>> getTransactionsByUser(@PathVariable Long userId) {
         try {
             // Validate user exists
-            Boolean userExists = userServiceClient.userExists(userId).block();
+            Boolean userExists = userServiceClient.userExists(userId);
             if (userExists == null || !userExists) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(ApiResponse.error("User with ID " + userId + " not found"));
@@ -128,7 +128,7 @@ public class TransactionController {
                     transactionUpdateRequest.getDescription().trim());
 
             if (updatedTransaction != null) {
-                String userName = userServiceClient.getUserName(updatedTransaction.getUserId()).block();
+                String userName = userServiceClient.getUserName(updatedTransaction.getUserId());
                 TransactionResponse transactionResponse = new TransactionResponse(
                         updatedTransaction.getId(),
                         updatedTransaction.getAmount(),

@@ -3,77 +3,71 @@ package com.example.reportservice.service;
 import com.example.reportservice.dto.UserReportResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class UserServiceClient {
 
-    private final WebClient webClient;
+    @Autowired
+    private RestTemplate restTemplate;
+    
     private final ObjectMapper objectMapper;
+    
+    @Value("${user.service.url}")
+    private String userServiceUrl;
 
-    public UserServiceClient(@Value("${user.service.url}") String userServiceUrl) {
-        this.webClient = WebClient.builder()
-                .baseUrl(userServiceUrl)
-                .build();
+    public UserServiceClient() {
         this.objectMapper = new ObjectMapper();
     }
 
-    public Mono<Boolean> userExists(Long userId) {
-        return webClient.get()
-                .uri("/{id}", userId)
-                .retrieve()
-                .bodyToMono(String.class)
-                .map(response -> response.contains("\"success\":true"))
-                .onErrorReturn(false);
+    public Boolean userExists(Long userId) {
+        try {
+            String response = restTemplate.getForObject(userServiceUrl + "/" + userId, String.class);
+            return response != null && response.contains("\"success\":true");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public Mono<UserReportResponse> getUser(Long userId) {
-        return webClient.get()
-                .uri("/{id}", userId)
-                .retrieve()
-                .bodyToMono(String.class)
-                .map(response -> {
-                    try {
-                        JsonNode jsonNode = objectMapper.readTree(response);
-                        if (jsonNode.get("success").asBoolean()) {
-                            JsonNode data = jsonNode.get("data");
-                            return new UserReportResponse(
-                                    data.get("id").asLong(),
-                                    data.get("name").asText(),
-                                    data.get("email").asText(),
-                                    data.get("phoneNumber").asText(),
-                                    data.get("address").asText(),
-                                    data.get("bankAccountNumber").asText()
-                            );
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
-                .onErrorReturn(null);
+    public UserReportResponse getUser(Long userId) {
+        try {
+            String response = restTemplate.getForObject(userServiceUrl + "/" + userId, String.class);
+            if (response != null) {
+                JsonNode jsonNode = objectMapper.readTree(response);
+                if (jsonNode.get("success").asBoolean()) {
+                    JsonNode data = jsonNode.get("data");
+                    return new UserReportResponse(
+                            data.get("id").asLong(),
+                            data.get("name").asText(),
+                            data.get("email").asText(),
+                            data.get("phoneNumber").asText(),
+                            data.get("address").asText(),
+                            data.get("bankAccountNumber").asText()
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public Mono<String> getUserName(Long userId) {
-        return webClient.get()
-                .uri("/{id}", userId)
-                .retrieve()
-                .bodyToMono(String.class)
-                .map(response -> {
-                    try {
-                        JsonNode jsonNode = objectMapper.readTree(response);
-                        if (jsonNode.get("success").asBoolean()) {
-                            JsonNode data = jsonNode.get("data");
-                            return data.get("name").asText();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return "Unknown User";
-                })
-                .onErrorReturn("Unknown User");
+    public String getUserName(Long userId) {
+        try {
+            String response = restTemplate.getForObject(userServiceUrl + "/" + userId, String.class);
+            if (response != null) {
+                JsonNode jsonNode = objectMapper.readTree(response);
+                if (jsonNode.get("success").asBoolean()) {
+                    JsonNode data = jsonNode.get("data");
+                    return data.get("name").asText();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Unknown User";
     }
 }
