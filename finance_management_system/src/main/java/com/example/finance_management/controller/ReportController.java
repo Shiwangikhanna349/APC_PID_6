@@ -273,4 +273,87 @@ public class ReportController {
                     .body(ApiResponse.error("Error generating monthly summary: " + e.getMessage()));
         }
     }
+
+    @GetMapping("/weekly")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getWeeklySummary(
+            @RequestParam Long userId,
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam Integer week) {
+        try {
+            Optional<User> userOpt = financeService.getUserById(userId);
+            if (!userOpt.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error("User with ID " + userId + " not found"));
+            }
+
+            User user = userOpt.get();
+            List<com.example.finance_management.Transaction> allTransactions = financeService.getTransactionsByUser(userId);
+            
+            // Calculate the date range for the specified week
+            java.time.LocalDate firstDayOfMonth = java.time.LocalDate.of(year, month, 1);
+            java.time.LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+            
+            // Calculate week start and end dates
+            int startDay = (week - 1) * 7 + 1;
+            int endDay = Math.min(startDay + 6, lastDayOfMonth.getDayOfMonth());
+            
+            java.time.LocalDate weekStart = java.time.LocalDate.of(year, month, startDay);
+            java.time.LocalDate weekEnd = java.time.LocalDate.of(year, month, endDay);
+            
+            // Filter transactions for the specific week
+            List<com.example.finance_management.Transaction> weeklyTransactions = new ArrayList<>();
+            double weeklyIncome = 0.0;
+            double weeklyExpenses = 0.0;
+            
+            for (com.example.finance_management.Transaction transaction : allTransactions) {
+                java.time.LocalDate transactionDate = transaction.getTransactionDate().toLocalDate();
+                if (!transactionDate.isBefore(weekStart) && !transactionDate.isAfter(weekEnd)) {
+                    weeklyTransactions.add(transaction);
+                    
+                    if (transaction.getType().toString().equals("INCOME")) {
+                        weeklyIncome += transaction.getAmount();
+                    } else {
+                        weeklyExpenses += transaction.getAmount();
+                    }
+                }
+            }
+            
+            double weeklyBalance = weeklyIncome - weeklyExpenses;
+            
+            // Convert to DTOs to avoid circular reference
+            List<MonthlyReportResponse> transactionDTOs = new ArrayList<>();
+            for (com.example.finance_management.Transaction transaction : weeklyTransactions) {
+                MonthlyReportResponse dto = new MonthlyReportResponse(
+                    transaction.getId(),
+                    transaction.getAmount(),
+                    transaction.getType().toString(),
+                    transaction.getDescription(),
+                    transaction.getTransactionDate(),
+                    transaction.getUserId(),
+                    transaction.getUserName()
+                );
+                transactionDTOs.add(dto);
+            }
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("userId", userId);
+            result.put("userName", user.getName());
+            result.put("year", year);
+            result.put("month", month);
+            result.put("week", week);
+            result.put("weekStart", weekStart.toString());
+            result.put("weekEnd", weekEnd.toString());
+            result.put("weeklyIncome", weeklyIncome);
+            result.put("weeklyExpenses", weeklyExpenses);
+            result.put("weeklyBalance", weeklyBalance);
+            result.put("transactionCount", weeklyTransactions.size());
+            result.put("transactions", transactionDTOs);
+
+            return ResponseEntity.ok(ApiResponse.success("Weekly summary generated successfully", result));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Error generating weekly summary: " + e.getMessage()));
+        }
+    }
 }

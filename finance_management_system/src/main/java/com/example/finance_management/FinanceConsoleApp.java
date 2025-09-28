@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Scanner;
 
-@Component
+// @Component  // Commented out to disable console app when running web application
 public class FinanceConsoleApp implements CommandLineRunner {
 
     @Autowired

@@ -5,6 +5,7 @@ import com.example.finance_management.Transaction;
 import com.example.finance_management.User;
 import com.example.finance_management.dto.ApiResponse;
 import com.example.finance_management.dto.TransactionRequest;
+import com.example.finance_management.dto.TransactionUpdateRequest;
 import com.example.finance_management.dto.TransactionResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,13 +115,13 @@ public class TransactionController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(@PathVariable Long id,
-            @Valid @RequestBody TransactionRequest transactionRequest) {
+            @Valid @RequestBody TransactionUpdateRequest transactionUpdateRequest) {
         try {
             Transaction updatedTransaction = financeService.updateTransaction(
                     id,
-                    transactionRequest.getAmount(),
-                    transactionRequest.getType(),
-                    transactionRequest.getDescription().trim());
+                    transactionUpdateRequest.getAmount(),
+                    transactionUpdateRequest.getType(),
+                    transactionUpdateRequest.getDescription().trim());
 
             if (updatedTransaction != null) {
                 TransactionResponse transactionResponse = new TransactionResponse(

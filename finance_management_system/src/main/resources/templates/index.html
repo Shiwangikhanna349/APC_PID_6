@@ -4,711 +4,355 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Finance Management System</h1>
-    
-    <div id="message"></div>
-    
-    
-    <div>
-        <button onclick="showSection('users')">User Management</button>
-        <button onclick="showSection('transactions')">Transaction Management</button>
-        <button onclick="showSection('reports')">Reports</button>
-    </div>
-    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Finance Management System</h1>
+            <p>Manage your finances with ease</p>
+        </div>
 
-    <div id="usersSection" style="display: none;">
-        <h2>User Management</h2>
-        
-        
-        <div>
-            <button onclick="showUserSection('add')">Add User</button>
-            <button onclick="showUserSection('list')">View All Users</button>
-            <button onclick="showUserSection('search')">Search User</button>
+        <!-- Main Navigation -->
+        <div class="nav-bar">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="showSection('users')">User Management</button>
+                <button class="nav-btn" onclick="showSection('transactions')">Transaction Management</button>
+                <button class="nav-btn" onclick="showSection('reports')">Reports</button>
+            </div>
         </div>
-        
-       
-        <div id="addUserSection" style="display: none;">
-            <h3>Add New User</h3>
-            <form id="addUserForm">
-                <div>
-                    <label>Name (Required):</label><br>
-                    <input type="text" id="addName" required minlength="2" maxlength="100">
+
+        <!-- User Management Section -->
+        <div id="usersSection" class="content-section">
+            <h2>User Management</h2>
+            
+            <!-- User Sub Navigation -->
+            <div class="sub-nav">
+                <div class="sub-nav-buttons">
+                    <button class="sub-nav-btn" onclick="showUserSection('add')">Add User</button>
+                    <button class="sub-nav-btn" onclick="showUserSection('list')">View All Users</button>
+                    <button class="sub-nav-btn" onclick="showUserSection('search')">Search User</button>
+                    <button class="sub-nav-btn" onclick="showUserSection('edit')">Edit User</button>
                 </div>
-                <br>
-                <div>
-                    <label>Email (Required):</label><br>
-                    <input type="email" id="addEmail" required maxlength="255">
+            </div>
+
+            <!-- Add User Section -->
+            <div id="addUserSection" style="display: none;">
+                <div class="form-container">
+                    <h3>Add New User</h3>
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label for="addName">Name (Required):</label>
+                            <input type="text" id="addName" class="form-control" required minlength="2" maxlength="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="addEmail">Email (Required):</label>
+                            <input type="email" id="addEmail" class="form-control" required maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <label for="addPhone">Phone Number (Required, 10 digits):</label>
+                            <input type="tel" id="addPhone" class="form-control" required pattern="[0-9]{10}" maxlength="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="addAddress">Address (Optional):</label>
+                            <textarea id="addAddress" class="form-control" maxlength="500" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="addBank">Bank Account Number (Optional, 10-20 digits):</label>
+                            <input type="text" id="addBank" class="form-control" pattern="[0-9]{10,20}" maxlength="20">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Add User</button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
                 </div>
-                <br>
-                <div>
-                    <label>Phone Number (Required, 10 digits):</label><br>
-                    <input type="tel" id="addPhone" required pattern="[0-9]{10}" maxlength="10">
+            </div>
+
+            <!-- List Users Section -->
+            <div id="listUserSection" style="display: none;">
+                <h3>All Users</h3>
+                <div id="usersTable"></div>
+            </div>
+
+            <!-- Search User Section -->
+            <div id="searchUserSection" style="display: none;">
+                <div class="form-container">
+                    <h3>Search User by ID</h3>
+                    <form id="searchUserForm">
+                        <div class="form-group">
+                            <label for="searchUserId">User ID:</label>
+                            <input type="number" id="searchUserId" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Search User</button>
+                        </div>
+                    </form>
+                    <div id="searchUserResult" class="report-result">
+                        <h4>User Details</h4>
+                        <div id="userInfo"></div>
+                    </div>
                 </div>
-                <br>
-                <div>
-                    <label>Address (Optional):</label><br>
-                    <textarea id="addAddress" maxlength="500" rows="3" cols="50"></textarea>
+            </div>
+
+            <!-- Edit User Section -->
+            <div id="editUserSection" style="display: none;">
+                <div class="form-container">
+                    <h3>Edit User</h3>
+                    <form id="editUserForm">
+                        <div class="form-group">
+                            <label for="editUserId">User ID (Required):</label>
+                            <input type="number" id="editUserId" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="editName">Name (Required):</label>
+                            <input type="text" id="editName" class="form-control" required minlength="2" maxlength="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmail">Email (Required):</label>
+                            <input type="email" id="editEmail" class="form-control" required maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <label for="editPhone">Phone Number (Required, 10 digits):</label>
+                            <input type="tel" id="editPhone" class="form-control" required pattern="[0-9]{10}" maxlength="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAddress">Address (Optional):</label>
+                            <textarea id="editAddress" class="form-control" maxlength="500" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editBank">Bank Account Number (Optional, 10-20 digits):</label>
+                            <input type="text" id="editBank" class="form-control" pattern="[0-9]{10,20}" maxlength="20">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Update User</button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
                 </div>
-                <br>
-                <div>
-                    <label>Bank Account Number (Optional, 10-20 digits):</label><br>
-                    <input type="text" id="addBank" pattern="[0-9]{10,20}" maxlength="20">
-                </div>
-                <br>
-                <div>
-                    <button type="submit">Add User</button>
-                    <button type="reset">Clear Form</button>
-                </div>
-            </form>
+            </div>
         </div>
-        
-       
-        <div id="listUserSection" style="display: none;">
-            <h3>All Users</h3>
-            <div id="usersTable"></div>
+
+        <!-- Transaction Management Section -->
+        <div id="transactionsSection" class="content-section">
+            <h2>Transaction Management</h2>
+            
+            <!-- Transaction Sub Navigation -->
+            <div class="sub-nav">
+                <div class="sub-nav-buttons">
+                    <button class="sub-nav-btn" onclick="showTransactionSection('add')">Add Transaction</button>
+                    <button class="sub-nav-btn" onclick="showTransactionSection('list')">View All Transactions</button>
+                    <button class="sub-nav-btn" onclick="showTransactionSection('user')">View User Transactions</button>
+                    <button class="sub-nav-btn" onclick="showTransactionSection('edit')">Edit Transaction</button>
+                </div>
+            </div>
+
+            <!-- Add Transaction Section -->
+            <div id="addTransactionSection" style="display: none;">
+                <div class="form-container">
+                    <h3>Add New Transaction</h3>
+                    <form id="addTransactionForm">
+                        <div class="form-group">
+                            <label for="addTransactionUserId">User ID (Required):</label>
+                            <input type="number" id="addTransactionUserId" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="addTransactionAmount">Amount (Required):</label>
+                            <input type="number" id="addTransactionAmount" class="form-control" step="0.01" required min="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="addTransactionType">Transaction Type (Required):</label>
+                            <select id="addTransactionType" class="form-control" required>
+                                <option value="">Select Type</option>
+                                <option value="INCOME">Income</option>
+                                <option value="EXPENSE">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="addTransactionDescription">Description (Required):</label>
+                            <input type="text" id="addTransactionDescription" class="form-control" required maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Add Transaction</button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List Transactions Section -->
+            <div id="listTransactionSection" style="display: none;">
+                <h3>All Transactions</h3>
+                <div id="transactionsTable"></div>
+            </div>
+
+            <!-- User Transactions Section -->
+            <div id="userTransactionSection" style="display: none;">
+                <div class="form-container">
+                    <h3>Transactions by User</h3>
+                    <form id="userTransactionForm">
+                        <div class="form-group">
+                            <label for="userTransactionUserId">User ID:</label>
+                            <input type="number" id="userTransactionUserId" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">View Transactions</button>
+                        </div>
+                    </form>
+                    <div id="userTransactionResult" class="report-result">
+                        <h4>Transactions for User <span id="displayTransactionUserId"></span></h4>
+                        <div id="userTransactionTable"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Transaction Section -->
+            <div id="editTransactionSection" style="display: none;">
+                <div class="form-container">
+                    <h3>Edit Transaction</h3>
+                    <form id="editTransactionForm">
+                        <div class="form-group">
+                            <label for="editTransactionId">Transaction ID (Required):</label>
+                            <input type="number" id="editTransactionId" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="editTransactionAmount">Amount (Required):</label>
+                            <input type="number" id="editTransactionAmount" class="form-control" step="0.01" required min="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="editTransactionType">Transaction Type (Required):</label>
+                            <select id="editTransactionType" class="form-control" required>
+                                <option value="">Select Type</option>
+                                <option value="INCOME">Income</option>
+                                <option value="EXPENSE">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTransactionDescription">Description (Required):</label>
+                            <input type="text" id="editTransactionDescription" class="form-control" required maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Update Transaction</button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        
-   
-        <div id="searchUserSection" style="display: none;">
-            <h3>Search User by ID</h3>
-            <form id="searchUserForm">
-                <div>
-                    <label>User ID:</label><br>
-                    <input type="number" id="searchUserId" required min="1">
+
+        <!-- Reports Section -->
+        <div id="reportsSection" class="content-section">
+            <h2>Generate Reports</h2>
+            
+            <!-- User Financial Report -->
+            <div class="report-section">
+                <h3>User Financial Report</h3>
+                <form id="userReportForm">
+                    <div class="form-group">
+                        <label for="reportUserId">User ID:</label>
+                        <input type="number" id="reportUserId" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Generate User Report</button>
+                    </div>
+                </form>
+                <div id="userReportResult" class="report-result">
+                    <div id="userReportContent"></div>
                 </div>
-                <br>
-                <div>
-                    <button type="submit">Search User</button>
+            </div>
+
+            <!-- Monthly Financial Report -->
+            <div class="report-section">
+                <h3>Monthly Financial Report</h3>
+                <form id="monthlyReportForm">
+                    <div class="form-group">
+                        <label for="monthlyReportUserId">User ID (Required):</label>
+                        <input type="number" id="monthlyReportUserId" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlyReportYear">Year (Required):</label>
+                        <input type="number" id="monthlyReportYear" class="form-control" required min="2000" max="2100">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlyReportMonth">Month:</label>
+                        <select id="monthlyReportMonth" class="form-control" required>
+                            <option value="">Select Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Generate Monthly Report</button>
+                    </div>
+                </form>
+                <div id="monthlyReportResult" class="report-result">
+                    <div id="monthlyReportContent"></div>
                 </div>
-            </form>
-            <div id="searchUserResult" style="display: none; margin-top: 20px; padding: 20px; border: 1px solid #ddd;">
-                <h4>User Details</h4>
-                <div id="userInfo"></div>
+            </div>
+
+            <!-- Weekly Financial Report -->
+            <div class="report-section">
+                <h3>Weekly Financial Report</h3>
+                <form id="weeklyReportForm">
+                    <div class="form-group">
+                        <label for="weeklyReportUserId">User ID (Required):</label>
+                        <input type="number" id="weeklyReportUserId" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyReportYear">Year (Required):</label>
+                        <input type="number" id="weeklyReportYear" class="form-control" required min="2000" max="2100">
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyReportMonth">Month (Required):</label>
+                        <select id="weeklyReportMonth" class="form-control" required>
+                            <option value="">Select Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyReportWeek">Week (Required):</label>
+                        <select id="weeklyReportWeek" class="form-control" required>
+                            <option value="">Select Week</option>
+                            <option value="1">Week 1 (1-7)</option>
+                            <option value="2">Week 2 (8-14)</option>
+                            <option value="3">Week 3 (15-21)</option>
+                            <option value="4">Week 4 (22-28)</option>
+                            <option value="5">Week 5 (29-31)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Generate Weekly Report</button>
+                    </div>
+                </form>
+                <div id="weeklyReportResult" class="report-result">
+                    <div id="weeklyReportContent"></div>
+                </div>
             </div>
         </div>
     </div>
-    
- 
-    <div id="transactionsSection" style="display: none;">
-        <h2>Transaction Management</h2>
-        
-   
-        <div>
-            <button onclick="showTransactionSection('add')">Add Transaction</button>
-            <button onclick="showTransactionSection('list')">View All Transactions</button>
-            <button onclick="showTransactionSection('user')">View User Transactions</button>
-        </div>
-        
-     
-        <div id="addTransactionSection" style="display: none;">
-            <h3>Add New Transaction</h3>
-            <form id="addTransactionForm">
-                <div>
-                    <label>User ID (Required):</label><br>
-                    <input type="number" id="addTransactionUserId" required min="1">
-                </div>
-                <br>
-                <div>
-                    <label>Amount (Required):</label><br>
-                    <input type="number" id="addTransactionAmount" step="0.01" required min="0.01">
-                </div>
-                <br>
-                <div>
-                    <label>Transaction Type (Required):</label><br>
-                    <select id="addTransactionType" required>
-                        <option value="">Select Type</option>
-                        <option value="INCOME">Income</option>
-                        <option value="EXPENSE">Expense</option>
-                    </select>
-                </div>
-                <br>
-                <div>
-                    <label>Description (Required):</label><br>
-                    <input type="text" id="addTransactionDescription" required maxlength="255">
-                </div>
-                <br>
-                <div>
-                    <button type="submit">Add Transaction</button>
-                    <button type="reset">Clear Form</button>
-                </div>
-            </form>
-        </div>
-        
- 
-        <div id="listTransactionSection" style="display: none;">
-            <h3>All Transactions</h3>
-            <div id="transactionsTable"></div>
-        </div>
-        
-   
-        <div id="userTransactionSection" style="display: none;">
-            <h3>Transactions by User</h3>
-            <form id="userTransactionForm">
-                <div>
-                    <label>User ID:</label><br>
-                    <input type="number" id="userTransactionUserId" required min="1">
-                </div>
-                <br>
-                <div>
-                    <button type="submit">View Transactions</button>
-                </div>
-            </form>
-            <div id="userTransactionResult" style="display: none; margin-top: 20px;">
-                <h4>Transactions for User <span id="displayTransactionUserId"></span></h4>
-                <div id="userTransactionTable"></div>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div id="reportsSection" style="display: none;">
-        <h2>Generate Reports</h2>
-        
-    
-        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
-            <h3>User Financial Report</h3>
-            <form id="userReportForm">
-                <div>
-                    <label>User ID:</label><br>
-                    <input type="number" id="reportUserId" required min="1">
-                </div>
-                <br>
-                <div>
-                    <button type="submit">Generate User Report</button>
-                </div>
-            </form>
-            <div id="userReportResult" style="display: none; margin-top: 15px; padding: 10px; background: #f5f5f5;">
-                <div id="userReportContent"></div>
-            </div>
-        </div>
-        
-       
-        <div style="border: 1px solid #ddd; padding: 15px;">
-            <h3>Monthly Financial Report</h3>
-            <form id="monthlyReportForm">
-                <div>
-                    <label>User ID (Required):</label><br>
-                    <input type="number" id="monthlyReportUserId" required min="1">
-                </div>
-                <br>
-                <div>
-                    <label>Year (Required):</label><br>
-                    <input type="number" id="monthlyReportYear" required min="2000" max="2100">
-                </div>
-                <br>
-                <div>
-                    <label>Month:</label><br>
-                    <select id="monthlyReportMonth" required>
-                        <option value="">Select Month</option>
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                </div>
-                <br>
-                <div>
-                    <button type="submit">Generate Monthly Report</button>
-                </div>
-            </form>
-            <div id="monthlyReportResult" style="display: none; margin-top: 15px; padding: 10px; background: #f5f5f5;">
-                <div id="monthlyReportContent"></div>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-     
-        function showSection(section) {
-          
-            document.getElementById('usersSection').style.display = 'none';
-            document.getElementById('transactionsSection').style.display = 'none';
-            document.getElementById('reportsSection').style.display = 'none';
-            
-  
-            document.getElementById(section + 'Section').style.display = 'block';
-            
-        
-            if (section === 'users') {
-                showUserSection('list');
-            } else if (section === 'transactions') {
-                showTransactionSection('list');
-            }
-        }
-        
-   
-        function showUserSection(section) {
 
-            document.getElementById('addUserSection').style.display = 'none';
-            document.getElementById('listUserSection').style.display = 'none';
-            document.getElementById('searchUserSection').style.display = 'none';
-            
-      
-            document.getElementById(section + 'UserSection').style.display = 'block';
-            
-
-            if (section === 'list') {
-                loadUsers();
-            }
-        }
-        
-  
-        function showTransactionSection(section) {
-            
-            document.getElementById('addTransactionSection').style.display = 'none';
-            document.getElementById('listTransactionSection').style.display = 'none';
-            document.getElementById('userTransactionSection').style.display = 'none';
-            
-        
-            document.getElementById(section + 'TransactionSection').style.display = 'block';
-            
-          
-            if (section === 'list') {
-                loadTransactions();
-            }
-        }
-        
-     
-        document.getElementById('addUserForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                name: document.getElementById('addName').value,
-                email: document.getElementById('addEmail').value,
-                phoneNumber: document.getElementById('addPhone').value,
-                address: document.getElementById('addAddress').value,
-                bankAccountNumber: document.getElementById('addBank').value
-            };
-            
-            try {
-                const response = await fetch('/user/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('User added successfully!', 'success');
-                    document.getElementById('addUserForm').reset();
-                } else {
-                    showMessage(result.message || 'Error adding user', 'error');
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-            }
-        });
-        
-        
-        document.getElementById('searchUserForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const userId = document.getElementById('searchUserId').value;
-            
-            try {
-                const response = await fetch(`/user/${userId}`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    displayUser(result.data);
-                } else {
-                    showMessage(result.message || 'User not found', 'error');
-                    document.getElementById('searchUserResult').style.display = 'none';
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-                document.getElementById('searchUserResult').style.display = 'none';
-            }
-        });
-        
-  
-        document.getElementById('addTransactionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                userId: parseInt(document.getElementById('addTransactionUserId').value),
-                amount: parseFloat(document.getElementById('addTransactionAmount').value),
-                type: document.getElementById('addTransactionType').value,
-                description: document.getElementById('addTransactionDescription').value
-            };
-            
-            try {
-                const response = await fetch('/transaction/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('Transaction added successfully!', 'success');
-                    document.getElementById('addTransactionForm').reset();
-                } else {
-                    showMessage(result.message || 'Error adding transaction', 'error');
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-            }
-        });
-        
-  
-        document.getElementById('userTransactionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const userId = document.getElementById('userTransactionUserId').value;
-            
-            try {
-                const response = await fetch(`/transaction/user/${userId}`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    displayUserTransactions(userId, result.data);
-                } else {
-                    showMessage(result.message || 'Error loading transactions', 'error');
-                    document.getElementById('userTransactionResult').style.display = 'none';
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-                document.getElementById('userTransactionResult').style.display = 'none';
-            }
-        });
-        
-       
-        document.getElementById('userReportForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const userId = document.getElementById('reportUserId').value;
-            
-            try {
-                const response = await fetch(`/reports/balance?userId=${userId}`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    displayUserReport(result.data);
-                } else {
-                    showMessage(result.message || 'Error generating report', 'error');
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-            }
-        });
-        
- 
-        document.getElementById('monthlyReportForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const userId = document.getElementById('monthlyReportUserId').value;
-            const year = document.getElementById('monthlyReportYear').value;
-            const month = document.getElementById('monthlyReportMonth').value;
-            
-            try {
-                const response = await fetch(`/reports/monthly?userId=${userId}&year=${year}&month=${month}`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    displayMonthlyReport(result.data);
-                } else {
-                    showMessage(result.message || 'Error generating report', 'error');
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-            }
-        });
-        
-       
-        async function loadUsers() {
-            try {
-                const response = await fetch('/user/all');
-                const result = await response.json();
-                
-                if (result.success) {
-                    displayUsers(result.data);
-                } else {
-                    showMessage(result.message || 'Error loading users', 'error');
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-            }
-        }
-        
-       
-        async function loadTransactions() {
-            try {
-                const response = await fetch('/transaction/all');
-                const result = await response.json();
-                
-                if (result.success) {
-                    displayTransactions(result.data);
-                } else {
-                    showMessage(result.message || 'Error loading transactions', 'error');
-                }
-            } catch (error) {
-                showMessage('Network error: ' + error.message, 'error');
-            }
-        }
-        
-   
-        function displayUsers(users) {
-            if (users.length === 0) {
-                document.getElementById('usersTable').innerHTML = '<p>No users found</p>';
-                return;
-            }
-            
-            let tableHTML = `
-                <table border="1" cellpadding="5" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Bank Account</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
-            users.forEach(user => {
-                tableHTML += `
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email || '-'}</td>
-                        <td>${user.phoneNumber || '-'}</td>
-                        <td>${user.address || '-'}</td>
-                        <td>${user.bankAccountNumber || '-'}</td>
-                        <td>
-                            <button onclick="deleteUser(${user.id})">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tableHTML += '</tbody></table>';
-            document.getElementById('usersTable').innerHTML = tableHTML;
-        }
-        
- 
-        function displayTransactions(transactions) {
-            if (transactions.length === 0) {
-                document.getElementById('transactionsTable').innerHTML = '<p>No transactions found</p>';
-                return;
-            }
-            
-            let tableHTML = `
-                <table border="1" cellpadding="5" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Amount</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                            <th>User</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
-            transactions.forEach(transaction => {
-                const date = new Date(transaction.transactionDate).toLocaleString();
-                tableHTML += `
-                    <tr>
-                        <td>${transaction.id}</td>
-                        <td>$${transaction.amount.toFixed(2)}</td>
-                        <td>${transaction.type}</td>
-                        <td>${transaction.description}</td>
-                        <td>${date}</td>
-                        <td>${transaction.userName || 'Unknown'}</td>
-                        <td>
-                            <button onclick="deleteTransaction(${transaction.id})">Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tableHTML += '</tbody></table>';
-            document.getElementById('transactionsTable').innerHTML = tableHTML;
-        }
-        
-    
-        function displayUser(user) {
-            document.getElementById('userInfo').innerHTML = `
-                <p><strong>ID:</strong> ${user.id}</p>
-                <p><strong>Name:</strong> ${user.name}</p>
-                <p><strong>Email:</strong> ${user.email || 'Not provided'}</p>
-                <p><strong>Phone:</strong> ${user.phoneNumber || 'Not provided'}</p>
-                <p><strong>Address:</strong> ${user.address || 'Not provided'}</p>
-                <p><strong>Bank Account:</strong> ${user.bankAccountNumber || 'Not provided'}</p>
-            `;
-            document.getElementById('searchUserResult').style.display = 'block';
-            showMessage('User found successfully!', 'success');
-        }
-        
-       
-        function displayUserTransactions(userId, transactions) {
-            document.getElementById('displayTransactionUserId').textContent = userId;
-            document.getElementById('userTransactionResult').style.display = 'block';
-            
-            if (transactions.length === 0) {
-                document.getElementById('userTransactionTable').innerHTML = '<p>No transactions found for this user.</p>';
-                return;
-            }
-            
-            let tableHTML = `
-                <table border="1" cellpadding="5" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Amount</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            
-            transactions.forEach(transaction => {
-                const date = new Date(transaction.transactionDate).toLocaleString();
-                tableHTML += `
-                    <tr>
-                        <td>${transaction.id}</td>
-                        <td>$${transaction.amount.toFixed(2)}</td>
-                        <td>${transaction.type}</td>
-                        <td>${transaction.description}</td>
-                        <td>${date}</td>
-                    </tr>
-                `;
-            });
-            
-            tableHTML += '</tbody></table>';
-            document.getElementById('userTransactionTable').innerHTML = tableHTML;
-            showMessage('Transactions loaded successfully!', 'success');
-        }
-        
-     
-        function displayUserReport(data) {
-            document.getElementById('userReportResult').style.display = 'block';
-            
-            let content = `
-                <h4>User: ${data.userName}</h4>
-                <h4>Financial Summary</h4>
-                <p><strong>Total Income:</strong> $${data.income.toFixed(2)}</p>
-                <p><strong>Total Expenses:</strong> $${data.expenses.toFixed(2)}</p>
-                <p><strong>Net Balance:</strong> $${data.balance.toFixed(2)}</p>
-            `;
-            
-            document.getElementById('userReportContent').innerHTML = content;
-            showMessage('User report generated successfully!', 'success');
-        }
-        
-
-        function displayMonthlyReport(data) {
-            document.getElementById('monthlyReportResult').style.display = 'block';
-            
-            let content = `
-                <h4>Monthly Report for User ID: ${data.userId}</h4>
-                <p>Year: ${data.year}, Month: ${data.month}</p>
-                <h4>Monthly Summary</h4>
-                <p><strong>Total Income:</strong> $${data.monthlyIncome.toFixed(2)}</p>
-                <p><strong>Total Expenses:</strong> $${data.monthlyExpenses.toFixed(2)}</p>
-                <p><strong>Monthly Balance:</strong> $${data.monthlyBalance.toFixed(2)}</p>
-                <h4>Transactions (${data.transactions.length})</h4>
-            `;
-            
-            if (data.transactions.length > 0) {
-                content += '<table border="1" cellpadding="3" cellspacing="0"><tr><th>Description</th><th>Amount</th><th>Type</th><th>Date</th></tr>';
-                data.transactions.forEach(transaction => {
-                    content += `
-                        <tr>
-                            <td>${transaction.description}</td>
-                            <td>$${transaction.amount.toFixed(2)}</td>
-                            <td>${transaction.type}</td>
-                            <td>${new Date(transaction.transactionDate).toLocaleDateString()}</td>
-                        </tr>
-                    `;
-                });
-                content += '</table>';
-            } else {
-                content += '<p>No transactions found for this month.</p>';
-            }
-            
-            document.getElementById('monthlyReportContent').innerHTML = content;
-            showMessage('Monthly report generated successfully!', 'success');
-        }
-        
-    
-        async function deleteUser(userId) {
-            if (confirm('Are you sure you want to delete this user?')) {
-                try {
-                    const response = await fetch(`/user/delete/${userId}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        showMessage('User deleted successfully!', 'success');
-                        loadUsers(); 
-                    } else {
-                        showMessage(result.message || 'Error deleting user', 'error');
-                    }
-                } catch (error) {
-                    showMessage('Network error: ' + error.message, 'error');
-                }
-            }
-        }
-        
-       
-        async function deleteTransaction(transactionId) {
-            if (confirm('Are you sure you want to delete this transaction?')) {
-                try {
-                    const response = await fetch(`/transaction/delete/${transactionId}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        showMessage('Transaction deleted successfully!', 'success');
-                        loadTransactions(); // Reload the list
-                    } else {
-                        showMessage(result.message || 'Error deleting transaction', 'error');
-                    }
-                } catch (error) {
-                    showMessage('Network error: ' + error.message, 'error');
-                }
-            }
-        }
-        
-      
-        function showMessage(message, type) {
-            const messageDiv = document.getElementById('message');
-            const color = type === 'success' ? 'green' : type === 'error' ? 'red' : 'blue';
-            messageDiv.innerHTML = `<div style="color: ${color}; margin-bottom: 10px;">${message}</div>`;
-            setTimeout(() => {
-                messageDiv.innerHTML = '';
-            }, 5000);
-        }
-        
-
-        showSection('users');
-    </script>
+    <script src="/js/index.js"></script>
 </body>
 </html>
