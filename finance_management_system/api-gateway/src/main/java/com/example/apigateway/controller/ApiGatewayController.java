@@ -214,13 +214,6 @@ public class ApiGatewayController {
                 .onErrorReturn(ResponseEntity.status(500).body("Error calling report service"));
     }
     
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-    
-    @GetMapping("/index.html")
-    public String indexHtml() {
-        return "index";
-    }
+    // Static file serving - removed Thymeleaf methods
+    // The static files will be served automatically from src/main/resources/static/
 }
